@@ -1,12 +1,15 @@
 <script setup>
-import NavBar from './components/NavBar.vue'
 </script>
 
 <template>
-  <div class="app">
-    <NavBar />
-  </div>
+  <v-app>
+    <router-view/>
+  </v-app>
 </template>
 
 <style scoped>
+@font-face {
+  font-family: AvenirNextM-Regular;
+  src: url("~@/assets/fonts/AvenirNextM-Regular.ttf");
+}
 </style>
