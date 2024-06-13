@@ -58,7 +58,6 @@
     </div>
     <template v-slot:extension>
       <v-tabs
-        v-model="tab"
         dense
         background-color="#121212"
         :slider-size="5"
@@ -92,7 +91,7 @@ export default {
       menus: [
         { label: "Receitas", to: "/receitas" },
         { label: "Receitas Salgadas", to: "/receitas" },
-        { label: "Receitas Doces", to: "/doce" },
+        { label: "Receitas Doces", to: "/receitas" },
       ],
     }
   }
