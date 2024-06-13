@@ -29,10 +29,6 @@
           class="my-auto ml-4"
         >
         </v-img>
-        
-        <div class="text-h5 mb-2 font-weight-light text-center">
-          ALIMENTOS DA EPOCA, RECEITAS POR CATEGORIA E OUTRAS IDEIAS
-        </div>
 
         <div>
           <v-divider class="mb-8 mt-8"><span class="font-weight-bold">ESCOLHA SUA RECEITA</span></v-divider>
@@ -51,7 +47,7 @@
                 >
                 <div
                 class="cursor-pointer"
-                @click="navigateToCategories(key)"
+                @click="navigateToCategories(category)"
                 >
                   <v-img
                     style="height: 200px;"
@@ -84,7 +80,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -92,10 +87,12 @@ export default {
         "type": {
           "category": {
             "Entradas": {
+              "name": "Entradas",
               "linkImg": "https://blog.atau.com.br/wp-content/uploads/2019/03/opcoes-de-entrada-restaurante.jpg",
               "receitas": [
                 {
-                  "name": "Queijo Brie na Air Fryer", 
+                  "name": "Queijo Brie na Air Fryer",
+                  "imgLink": "https://i.panelinha.com.br/i1/bk-2392-ayu1139-blog.webp",
                   "description": "Uh lala! O queijo mais famoso da Europa ganhou várias camadas de sabor ao se deparar com a AirFryer da Rita Lobo. Em pouco minutinhos, o brie francês fica mais cremoso por dentro e com a casca dourada por fora. Além de ervas frescas e mel, figos frescos acompanham pra deixar a tábua de aperitivos ainda mais vistosa.",
                   "ingredient": [
                     "1 queijo brie",
@@ -115,6 +112,7 @@ export default {
                 },
                 {
                   "name": "Milho com manteiga", 
+                  "imgLink": "https://i.panelinha.com.br/i1/bk-9071-blog-milho-verde-na-airfryer.webp",
                   "ingredient": [
                     "1 espiga de milho-verde",
                     "1 colher de manteiga",
@@ -224,8 +222,8 @@ export default {
   },
   methods: {
     navigateToCategories(category) {
-      console.log(category)
-      this.$router.push({ path: '/categorias', query: { category } });
+      const categoryString = JSON.stringify(category);
+      this.$router.push({ path: '/categorias', query: { categoryString } });
     }
   }
 }
