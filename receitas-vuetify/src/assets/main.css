@@ -10,3 +10,8 @@ body {
     padding: 10px;
     font-size: 20px;
   }
+
+  @font-face {
+    font-family: 'MyFont';
+    src: url('./fonts/A Calling Font_D by 7NTypes.otf') format('opentype');
+  }

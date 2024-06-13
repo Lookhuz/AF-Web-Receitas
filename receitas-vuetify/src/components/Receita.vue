@@ -22,7 +22,7 @@
     >
       <div v-if="receiptData">
         <div class="text-h3 font-weight-normal mb-5 text-center">
-          {{ receiptData.name }}
+          <span id="span">{{ receiptData.name }}</span>
         </div>
         <v-img 
           style="height: 450px;" 
@@ -33,7 +33,7 @@
         </v-img>
 
         <div class="text-subtitle-1 mb-2 text-center">
-          {{ receiptData.description }}
+          <span id="span">{{ receiptData.description }}</span>
         </div>
 
         <v-divider class="my-8"></v-divider>
@@ -41,50 +41,61 @@
         <div class="d-flex">
           <div>
             <div class="text-h6 font-weight-bold ml-2">
-              Ingredientes
+              <span id="span">Ingredientes</span>
             </div>
-  
-            <div 
-              v-for="key in receiptData.ingredient" 
-              class="d-flex"
-            >
-              <v-icon 
-                size="x-large" 
-                style="width: 12px; 
-                height: 12px;"
-                class="align-self-center"
+
+            <v-row no-gutters>
+              <v-col
+                v-for="key in receiptData.ingredient" 
+                :key="key"
+                cols="5"
+                md="6"
               >
-                mdi-circle-small
-              </v-icon>
-  
+                <div 
+                  class="d-flex"
+                >
+                  <v-icon 
+                    size="x-large" 
+                    style="width: 12px; 
+                    height: 12px;"
+                    class="align-self-center"
+                  >
+                    mdi-circle-small
+                  </v-icon>
+      
+                  <div class="text-subtitle-1">
+                    <span id="span">{{ key }}</span>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+            </div>
+            
+            <v-spacer></v-spacer>
+          </div>
+
+          <v-divider class="my-8"></v-divider>
+
+          <div class="d-flex">
+            <div class="d-flex">
               <div class="text-subtitle-1">
-                {{ key }}
+                <span id="span">Tempo de preparo:</span>
+              </div>
+              <div class="ml-2 text-subtitle-1 font-weight-bold">
+                <span id="span">{{ receiptData.time }}</span>
+              </div>
+            </div>
+            <div class="d-flex ml-4">
+              <div class="text-subtitle-1">
+                <span id="span">Serve:</span>
+              </div>
+              <div class="ml-2 text-subtitle-1 font-weight-bold">
+                <span id="span">{{ receiptData.serve }}</span>
               </div>
             </div>
           </div>
-
-          <v-spacer></v-spacer>
-          <div>
-            <div class="d-flex">
-              <div class="text-subtitle-1">
-                Tempo de preparo:
-              </div>
-              <div class="ml-2 text-subtitle-1 font-weight-bold">
-                {{ receiptData.time }}
-              </div>
-            </div>
-            <div class="d-flex">
-              <div class="text-subtitle-1">
-                Serve:
-              </div>
-              <div class="ml-2 text-subtitle-1 font-weight-bold">
-                {{ receiptData.serve }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <v-divider class="my-8"><span class="font-weight-bold text-h6">Modo de preparo</span></v-divider>
+          
+        <v-divider class="my-8"><span class="font-weight-bold text-h6" id="span">Modo de preparo</span></v-divider>
 
         <div
           v-for="(key, index) in receiptData.preparo"
@@ -92,10 +103,10 @@
           class="d-flex"
         >
           <div class="ml-2 text-subtitle-1 font-weight-bold mb-4">
-            {{ index + '.' }}
+            <span id="span">{{ index + '.' }}</span>
           </div>
           <div class="ml-2 text-subtitle-1 font-weight-normal mb-4">
-            {{ key }}
+            <span id="span">{{ key }}</span>
           </div>
         </div>
       </div>
@@ -135,4 +146,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+#span{
+  font-family: 'MyFont';
+}
+</style>

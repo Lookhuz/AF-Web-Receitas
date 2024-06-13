@@ -2,14 +2,13 @@
 </script>
 
 <template>
-  <v-app>
+  <v-app id="app">
     <router-view/>
   </v-app>
 </template>
 
 <style scoped>
-@font-face {
-  font-family: AvenirNextM-Regular;
-  src: url("~@/assets/fonts/AvenirNextM-Regular.ttf");
+#app{
+  font-family: 'MyFont';
 }
 </style>

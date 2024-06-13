@@ -18,7 +18,7 @@
       class="pt-8"
     >
       <div v-if="categoryData" class="text-h3 font-weight-light pb-8 text-center">
-        {{ categoryData.name }}
+        <span id="span">{{ categoryData.name }}</span>
       </div>
 
       <div>
@@ -27,15 +27,15 @@
               <v-col
                 v-for="key in categoryData.receitas"
                 :key="key"
-                cols="12"
-                md="4"
+                cols="16"
+                md="6"
                 >
                 <div
                 class="cursor-pointer"
                 @click="navigateToReceipt(key)"
                 >
                   <v-img
-                    style="height: 200px;"
+                    style="height: 300px;"
                     :src="key.imgLink"
                     cover
                     class="my-auto"
@@ -43,7 +43,7 @@
                   </v-img>
                   
                   <div class="text-subtitle-1 mb-2 text-center">
-                    <span>{{ key.name }}</span>
+                    <span id="span">{{ key.name }}</span>
                   </div>
                 </div>
               </v-col>
@@ -91,5 +91,8 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
+#span{
+  font-family: 'MyFont';
+}
 </style>

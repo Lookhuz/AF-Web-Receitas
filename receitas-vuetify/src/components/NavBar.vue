@@ -89,9 +89,7 @@ export default {
   data() {
     return {
       menus: [
-        { label: "Receitas", to: "/receitas" },
-        { label: "Receitas Salgadas", to: "/receitas" },
-        { label: "Receitas Doces", to: "/receitas" },
+        { label: "Home", to: "/receitas" },
       ],
     }
   }
