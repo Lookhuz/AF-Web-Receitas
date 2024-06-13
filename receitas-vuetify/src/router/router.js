@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import siteLayout from '../layouts/siteLayout.vue'
-import Doce from '../components/Doce.vue'
+import Receita from '../components/Receita.vue'
 import Receitas from '../components/Receitas.vue'
 import Categorias from '../components/Categorias.vue';
 
@@ -16,9 +16,9 @@ const routes = [
         component: Receitas
       },
       {
-        path: '/doce',
-        name: "doce",
-        component: Doce
+        path: '/receita',
+        name: "Receita",
+        component: Receita
       },
       {
         path: '/categorias',
