@@ -46,7 +46,7 @@
                   <v-spacer></v-spacer>
                   <v-rating
                     v-model="key.rate"
-                    hover
+                    readonly
                   ></v-rating>
                 </div>
               </div>
@@ -87,7 +87,6 @@ export default {
     },
     navigateToReceipt(recipe) {
       const name = this.filteredRecipe.name
-      console.log(name)
       this.$router.push({ path: `/receita/${name}/${recipe}` });
     },
     fetchCategories() {
@@ -105,9 +104,6 @@ export default {
       const categoryName = this.getCategoryFromUrl();
       this.filteredRecipe = this.recipes.find(recipe => recipe.name === categoryName);
     },
-    banana() {
-      console.log(this.filteredRecipe)
-    }
   },
   mounted () {
     this.fetchCategories()

@@ -78,7 +78,7 @@
               </div>
               <v-rating
                 v-model="receiptData.rate"
-                hover
+                readonly
               ></v-rating>
             </div>
           </div>
@@ -120,12 +120,12 @@
         </div>
       </div>
 
-      <div>
+      <div v-if="receiptData">
         <div class="text-h5 font-weight-bold mt-8">
           <span id="span">Seção de comentários:</span>
         </div>
         <div>
-          <div v-if="receiptData == 0">
+          <div v-if="receiptData.comments == 0">
             <div class="text-h6 font-weight-normal mt-2">
               <span id="span">Ainda não há comentários, porque não escreve algum?</span>
             </div>
@@ -133,7 +133,7 @@
           <div v-if="receiptData">
             <div
               v-for="(key, index) in receiptData.comments"
-              :key="key"
+              :key="key.id"
               class="d-flex"
               >
               <div class="border-md w-100 mt-2 rounded-lg">
@@ -149,15 +149,18 @@
 
         </div>
         <v-sheet class="my-8" >
-          <v-form fast-fail @submit.prevent="submitComment">
+          <v-form 
+            fast-fail 
+            @submit.prevent="submitComment"
+          >
             <v-text-field
-              v-model="name"
-              label="Name"
+              v-model="newComment.name"
+              label="Nome"
             ></v-text-field>
 
             <v-text-field
-              v-model="commentLabel"
-              label="Comment"
+              v-model="newComment.comment"
+              label="Comentário"
             ></v-text-field>
 
             <v-btn class="mt-2" type="submit" block>Enviar Comentário</v-btn>
@@ -184,15 +187,13 @@ export default {
   data() {
     return {
       receiptData: null,
-      name: '',
       nameRules: [
         value => {
           if (value?.length >= 3) return true
-
+          
           return 'Name must be at least 3 characters.'
         },
       ],
-      commentLabel: '',
       commentRules: [
         value => {
           if (value?.length >= 5) return true
@@ -200,23 +201,13 @@ export default {
           return 'Comment must be at least 5 characters.'
         },
       ],
-      comments: [
-        // {
-        //   "author": "Seido",
-        //   "comment": "Muito bom!",
-        // },
-        // {
-        //   "author": "Breno",
-        //   "comment": "Parabéns!",
-        // },
-        // {
-        //   "author": "Justas",
-        //   "comment": "Boa!",
-        // }
-      ],
       recipes: [],
       filteredCategory: [],
-      filteredRecipe: []
+      filteredRecipe: [],
+      newComment: {
+        name: '',
+        comment: '',
+      }
     }
   },
   computed: {
@@ -231,13 +222,22 @@ export default {
   },
   methods: {
     submitComment() {
-      if (this.name.length >= 3 && this.commentLabel.length >= 5) {
-        this.comments.push({
-          author: this.name,
-          comment: this.commentLabel
-        });
-        this.name = '';
-        this.commentLabel = '';
+      if (this.newComment.name.length >= 3 && this.newComment.comment.length >= 5) {
+        const payload = {
+          name: this.newComment.name,
+          comment: this.newComment.comment,
+          recipe: this.receiptData.id
+        }
+        axios
+          .post(`http://127.0.0.1:8000/api/v1/recipes/${this.receiptData.id}/comments/`, payload)
+          .then(response => {
+            this.receiptData.comments.push(response.data);
+            this.newComment.name = '';
+            this.newComment.comment = '';
+          })
+          .catch(error => {
+            console.error('Erro ao enviar comentário:', error);
+          });
       }
     },
     fetchCategories() {
@@ -245,7 +245,6 @@ export default {
         .get('http://localhost:8000/api/v1/categories/')
         .then(response => {
           this.recipes = JSON.parse(JSON.stringify(response.data));
-          console.log(response.data)
           this.getRecipeFromUrl()
           this.finishData()
         })

@@ -13,7 +13,7 @@
         <v-divider></v-divider>
   
         <v-card-text class="white--text">
-          Copyright ©{{ new Date().getFullYear() }} - Designed by Lookuz
+          Copyright ©{{ new Date().getFullYear() }} - Designed by Trapalhões
         </v-card-text>
       </v-card>
     </div>

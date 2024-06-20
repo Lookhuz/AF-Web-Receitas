@@ -23,38 +23,10 @@
        
         <div 
           class="my-auto mr-3 pr-3 font-weight-light"
-          style="font-size: 26px !important;"
+          style="font-size: 60px !important;"
         >
-          Receitas Lookuz
+          CodeBites
         </div>    
-
-        <v-spacer></v-spacer>
-
-        <v-menu
-          open-on-hover
-          bottom
-          offset-y
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="my-auto ml-12"
-              v-bind="attrs"
-              icon
-            >
-              <v-icon>
-                mdi-account
-              </v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item link @click="logoutClicked()">
-              <v-list-item-title>
-                Logout
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
       </div>
     </div>
     <template v-slot:extension>
