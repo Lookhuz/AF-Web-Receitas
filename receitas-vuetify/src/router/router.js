@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import siteLayout from '../layouts/siteLayout.vue'
 import Receita from '../components/Receita.vue'
-import Receitas from '../components/Receitas.vue'
+import Home from '../components/Home.vue'
 import Categorias from '../components/Categorias.vue';
 
 const routes = [
@@ -14,7 +14,7 @@ const routes = [
       {
         path: '/receitas',
         name: "receitas",
-        component: Receitas
+        component: Home
       },
       {
         path: '/receita/:category/:name',
