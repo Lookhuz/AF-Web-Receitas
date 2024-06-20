@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters class="mb-8 px-8">
+  <v-row no-gutters class="mb-8 px-8 rowdiv">
     <v-col
       xs="0"
       sm="0"
@@ -40,25 +40,25 @@
           <div>
             <v-row justify="space-around">
               <v-col
-                v-for="(category, key) in items.type.category"
+                v-for="(category, key) in recipes"
                 :key="key"
                 cols="16"
                 md="6"
-                >
+              >
                 <div
                 class="cursor-pointer"
                 @click="navigateToCategories(category)"
                 >
                   <v-img
-                    style="height: 200px;"
-                    :src="category.linkImg"
+                    style="height: 300px;"
+                    :src="category.image"
                     cover
                     class="my-auto"
                   >
                   </v-img>
                   
-                  <div class="text-h6 mb-2 text-center">
-                    <span id="span">{{ key }}</span>
+                  <div class="text-h5 mt-2 mb-2 text-center">
+                    <span id="span">{{ category.name }}</span>
                   </div>
                 </div>
               </v-col>
@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -92,6 +94,7 @@ export default {
               "receitas": [
                 {
                   "name": "Queijo Brie na Air Fryer",
+                  "rate": "3",
                   "imgLink": "https://i.panelinha.com.br/i1/bk-2392-ayu1139-blog.webp",
                   "description": "Uh lala! O queijo mais famoso da Europa ganhou várias camadas de sabor ao se deparar com a AirFryer da Rita Lobo. Em pouco minutinhos, o brie francês fica mais cremoso por dentro e com a casca dourada por fora. Além de ervas frescas e mel, figos frescos acompanham pra deixar a tábua de aperitivos ainda mais vistosa.",
                   "ingredient": [
@@ -108,10 +111,11 @@ export default {
                     "5": "Sirva a seguir com pães, castanhas, frutas frescas e secas."
                   },
                   "time": "Pá-Pum",
-                  "serve": "4 Porcoes"
+                  "serve": "4 Porções"
                 },
                 {
                   "name": "Milho com manteiga",
+                  "rate": "4",
                   "imgLink": "https://i.panelinha.com.br/i1/bk-9071-blog-milho-verde-na-airfryer.webp",
                   "description": "Você está diante da sua nova receita preferida. Na AirFryer, o milho ganha textura de grelhado, mas fica úmido ao mesmo tempo. A manteiga temperada dá o toque final (e vale até variar as especiarias e ervas para mudar o sabor dela). É uma opção que vai bem como acompanhamento ou como lanche da tarde.",
                   "ingredient": [
@@ -130,10 +134,11 @@ export default {
                     "7": "Com uma pinça, transfira as espigas para um prato e desembale com cuidado para não se queimar. Sirva a seguir com a manteiga derretida que sobrar na trouxinha.",
                   },
                   "time": "Pá-Pum",
-                  "serve": "3 Porcoes"
+                  "serve": "3 Porções"
                 },
                 {
                   "name": "Croquete de carne moída",
+                  "rate": "5",
                   "imgLink": "https://i.panelinha.com.br/i1/bk-4520-20240322-162202-01-blog-1-01.webp",
                   "description": "Se vai ter festa, ele precisa ser convidado. A carne moída bem temperadinha e a farinha de rosca caseira fazem toda a diferença para que os croquetes fiquem macios e crocantes na medida certa. A receita rende 28 unidades. Sobrou? Pode congelar já empanado. Depois, é só mandar do freezer para o óleo quente.",
                   "ingredient": [
@@ -172,6 +177,7 @@ export default {
                 },
                 {
                   "name": "Coração de frango na frigideira",
+                  "rate": "2",
                   "imgLink": "https://i.panelinha.com.br/i1/bk-4168-20240322-105039-blog.webp",
                   "description": "O mais legal desta receita é que você não precisa esperar o churrasco para apreciar esse sabor intenso. Depois de cozido, o coração ganha um molho todo especial e pode virar a carne do pê-efe ou a estrela da happy hour.",
                   "ingredient": [
@@ -205,6 +211,7 @@ export default {
                   {
                     "name": "Hambúrguer na AirFryer",
                     "imgLink": "https://i.panelinha.com.br/i1/bk-3269-ayu1061.webp",
+                    "rate": "3",
                     "description": "Aqui entre nós, o hambúrguer por delivery está com os dias contados. Em tempo recorde, você vai preparar não apenas um, mas dois hambúrgueres sem bagunça ou fumaça na cozinha. Tudo graças ao fornecedor mais rápido da cidade: a AirFryer da Rita Lobo.",
                     "ingredient": [
                         "180 g de acém moído",
@@ -226,6 +233,7 @@ export default {
                 },
                 {
                   "name": "Salmão Grelhado",
+                  "rate": "4",
                   "imgLink": "https://diariodonordeste.verdesmares.com.br/image/contentid/policy:1.3271777:1661552221/Salm-o-Grelhado.jpg?f=default&$p$f=9d21cfc",
                   "description": "Salmão grelhado na AirFryer, temperado com limão e ervas. Uma opção saudável e deliciosa para qualquer refeição.",
                   "ingredient": [
@@ -250,6 +258,7 @@ export default {
                 },
                 {
                   "name": "Risoto de Cogumelos",
+                  "rate": "5",
                   "imgLink": "https://static.itdg.com.br/images/622-auto/705ff0a5ea62aba084723e10855f52a1/shutterstock-2396593015.jpg",
                   "description": "Um risoto cremoso e saboroso feito com uma variedade de cogumelos frescos e finalizado na AirFryer.",
                   "ingredient": [
@@ -287,6 +296,7 @@ export default {
               "receitas": [
                 {
                   "name": "Costelinha de Porco",
+                  "rate": "4",
                   "imgLink": "https://s2.glbimg.com/ojl29vnndGC8huP0XUUfHNIBz3U=/e.glbimg.com/og/ed/f/original/2016/03/14/costelinha.jpg",
                   "description": "Costelinhas de porco suculentas e bem temperadas, preparadas na AirFryer para um toque crocante.",
                   "ingredient": [
@@ -310,6 +320,7 @@ export default {
                 },
                 {
                   "name": "Frango Assado",
+                  "rate": "2",
                   "imgLink": "https://www.entrepratosecopos.com.br/storage/receitas/imagem1_2370.jpg",
                   "description": "Frango assado crocante por fora e suculento por dentro, temperado com ervas e especiarias. Preparado na AirFryer para um resultado perfeito.",
                   "ingredient": [
@@ -335,6 +346,7 @@ export default {
                 },
                 {
                   "name": "Almôndegas de Carne",
+                  "rate": "4",
                   "imgLink": "https://s2-receitas.glbimg.com/xopMZAOyRQUBaTXzGX3mN9QMkV4=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2020/1/N/8z0UqcRzm5YWiS8BamhA/almondega.jpeg",
                   "description": "Almôndegas de carne suculentas e saborosas, preparadas na AirFryer. Perfeitas para servir com molho de tomate e espaguete.",
                   "ingredient": [
@@ -366,6 +378,7 @@ export default {
               "receitas": [
                 {
                   "name": "Frango Grelhado com Limão",
+                  "rate": "3",
                   "imgLink": "https://img.freepik.com/fotos-premium/frango-grelhado-com-manteiga-limao-e-alho-no-prato-branco_1339-146848.jpg",
                   "description": "Filés de frango marinados com limão e grelhados na AirFryer. Uma opção leve e saborosa para uma refeição rápida.",
                   "ingredient": [
@@ -390,6 +403,7 @@ export default {
                 },
                 {
                   "name": "Asas de Frango Picantes",
+                  "rate": "4",
                   "imgLink": "https://www.sabornamesa.com.br/media/k2/items/cache/5f6cc6be54b220e9d450a5b9c3eb9016_XL.jpg",
                   "description": "Asas de frango temperadas com uma mistura picante e assadas na AirFryer até ficarem crocantes e suculentas.",
                   "ingredient": [
@@ -414,6 +428,7 @@ export default {
                 },
                 {
                   "name": "Frango à Parmegiana",
+                  "rate": "5",
                   "imgLink": "https://www.unileverfoodsolutions.com.br/dam/global-ufs/mcos/SLA/calcmenu/recipes/BR-recipes/general/frango-%C3%A0-parmegiana-com-chips-de-batata-doce/main-header.jpg",
                   "description": "Filés de frango empanados e assados na AirFryer, cobertos com molho de tomate e queijo derretido.",
                   "ingredient": [
@@ -448,7 +463,8 @@ export default {
               "receitas": [
                 {
                   "name": "Lasanha de Berinjela",
-                  "imgLink": "https://claudia.abril.com.br/wp-content/uploads/2020/02/receita-lasanha-berinjela-a-napolitana.jpg",
+                  "rate": "2",
+                  "imgLink": "https://img.cybercook.com.br/receitas/161/lasanha-de-berinjela-3.jpeg",
                   "description": "Uma lasanha leve e deliciosa feita com fatias de berinjela grelhadas, molho de tomate e queijo.",
                   "ingredient": [
                     "2 berinjelas grandes",
@@ -473,6 +489,7 @@ export default {
                 },
                 {
                   "name": "Macarrão ao Alho e Óleo",
+                  "rate": "3",
                   "imgLink": "https://static.itdg.com.br/images/622-auto/da8ce89471c966faad0459a9d84bb422/macarrao-alho-e-oleo.jpeg",
                   "description": "Um clássico da culinária italiana, preparado de maneira simples e rápida na AirFryer.",
                   "ingredient": [
@@ -497,6 +514,7 @@ export default {
                 },
                 {
                   "name": "Ravioli de Queijo com Molho de Tomate",
+                  "rate": "4",
                   "imgLink": "https://static.itdg.com.br/images/auto-auto/7c1ba9391c665a602445cf3c26246f6e/receitas-de-ravioli.jpg",
                   "description": "Deliciosos raviolis recheados com queijo, servidos com um saboroso molho de tomate caseiro.",
                   "ingredient": [
@@ -528,6 +546,7 @@ export default {
               "receitas": [
                 {
                   "name": "Brownie de Chocolate",
+                  "rate": "5",
                   "imgLink": "https://www.receitasnestle.com.br/sites/default/files/srh_recipes/a400ee35c080a42937396b89567f229f.jpg",
                   "description": "Brownies de chocolate ricos e úmidos, preparados na AirFryer. Uma delícia para os amantes de chocolate.",
                   "ingredient": [
@@ -554,6 +573,7 @@ export default {
                 },
                 {
                   "name": "Pudim de Leite Condensado",
+                  "rate": "4",
                   "imgLink": "https://www.receitasnestle.com.br/sites/default/files/2021-07/image%20-%202021-07-23T124017.002.jpg",
                   "description": "Um pudim clássico e cremoso feito na AirFryer, com um toque especial de caramelo.",
                   "ingredient": [
@@ -575,6 +595,7 @@ export default {
                 },
                 {
                   "name": "Torta de Maçã",
+                  "rate": "3",
                   "imgLink": "https://assets.unileversolutions.com/recipes-v2/214902.jpg",
                   "description": "Uma torta de maçã simples e deliciosa, com uma crosta crocante e recheio doce e perfumado.",
                   "ingredient": [
@@ -601,14 +622,29 @@ export default {
             }
           }
         }
-      }
+      },
+      recipes: []
     }
   },
   methods: {
     navigateToCategories(category) {
-      const categoryString = JSON.stringify(category);
-      this.$router.push({ path: '/categorias', query: { categoryString } });
+      this.$router.push({ path: `/categorias/${category.name}` });
+    },
+    fetchCategories() {
+      console.log("Hello")
+      axios
+        .get('http://localhost:8000/api/v1/categories/')
+        .then(response => {
+          this.recipes = JSON.parse(JSON.stringify(response.data));
+          console.log(this.recipes)
+        })
+        .catch(error => {
+          console.error('Error fetching categories:', error);
+        });
     }
+  },
+  mounted() {
+    this.fetchCategories();
   }
 }
 </script>

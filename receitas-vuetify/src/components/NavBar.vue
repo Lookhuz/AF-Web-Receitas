@@ -2,6 +2,7 @@
   <v-app-bar
     app
     :height="105"
+    class="background-img"
   >
     <div
       style="width: 100%;"
@@ -72,7 +73,7 @@
           :to="menu.to"
         >
           <span 
-            class="white--text text-capitalize"
+            class="white--text"
             style="font-weight: 400;"
           >
             {{ menu.label }}
@@ -97,5 +98,20 @@ export default {
 </script>
 
 <style scoped>
+.background-img {
+  position: relative;
+}
 
+.background-img::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://33622.cdn.simplo7.net/static/33622/sku/tecidos-tricoline-tecido-tricoline-branco-folhas-branco-ref-1316--p-1643918210736.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.5; /* Ajuste a opacidade aqui */
+}
 </style>

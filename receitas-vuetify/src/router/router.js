@@ -22,7 +22,7 @@ const routes = [
         component: Receita
       },
       {
-        path: '/categorias',
+        path: '/categorias/:name',
         name: "categorias",
         component: Categorias
       }

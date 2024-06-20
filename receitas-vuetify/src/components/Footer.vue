@@ -1,5 +1,5 @@
 <template>
-  <v-footer dark padless class="d-flex align-center">
+  <v-footer dark padless class="d-flex align-center background-img">
     <div style="max-height: 200px; width: 100%;">
       <v-card flat tile width="100%" class="primary white--text text-center">
         <v-card-text>
@@ -89,4 +89,21 @@ export default {
 </script>
 
 <style scoped>
+.background-img {
+  position: relative;
+}
+
+.background-img::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://33622.cdn.simplo7.net/static/33622/sku/tecidos-tricoline-tecido-tricoline-branco-folhas-branco-ref-1316--p-1643918210736.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: 1; /* Adicione esta linha */
+}
 </style>

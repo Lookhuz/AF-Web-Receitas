@@ -32,7 +32,7 @@
         >
         </v-img>
 
-        <div class="text-subtitle-1 mb-2 text-center">
+        <div class="text-h6 mt-4 mb-2 text-center">
           <span id="span">{{ receiptData.description }}</span>
         </div>
 
@@ -40,7 +40,7 @@
 
         <div class="d-flex">
           <div>
-            <div class="text-h6 font-weight-bold ml-2">
+            <div class="text-h5 font-weight-bold ml-2">
               <span id="span">Ingredientes</span>
             </div>
 
@@ -63,7 +63,7 @@
                     mdi-circle-small
                   </v-icon>
       
-                  <div class="text-subtitle-1">
+                  <div class="text-h6">
                     <span id="span">{{ key }}</span>
                   </div>
                 </div>
@@ -72,43 +72,97 @@
             </div>
             
             <v-spacer></v-spacer>
+            <div>
+              <div class="text-h5 font-weight-bold ml-2">
+                <span id="span">Classificação Média dos Usuários:</span>
+              </div>
+              <v-rating
+                v-model="receiptData.rate"
+                hover
+              ></v-rating>
+            </div>
           </div>
 
           <v-divider class="my-8"></v-divider>
 
           <div class="d-flex">
             <div class="d-flex">
-              <div class="text-subtitle-1">
+              <div class="text-h6">
                 <span id="span">Tempo de preparo:</span>
               </div>
-              <div class="ml-2 text-subtitle-1 font-weight-bold">
+              <div class="ml-2 text-h6 font-weight-bold">
                 <span id="span">{{ receiptData.time }}</span>
               </div>
             </div>
             <div class="d-flex ml-4">
-              <div class="text-subtitle-1">
+              <div class="text-h6">
                 <span id="span">Serve:</span>
               </div>
-              <div class="ml-2 text-subtitle-1 font-weight-bold">
+              <div class="ml-2 text-h6 font-weight-bold">
                 <span id="span">{{ receiptData.serve }}</span>
               </div>
             </div>
           </div>
           
-        <v-divider class="my-8"><span class="font-weight-bold text-h6" id="span">Modo de preparo</span></v-divider>
+        <v-divider class="my-8"><span class="font-weight-bold text-h5" id="span">Modo de preparo</span></v-divider>
 
         <div
           v-for="(key, index) in receiptData.preparo"
           :key="key"
           class="d-flex"
         >
-          <div class="ml-2 text-subtitle-1 font-weight-bold mb-4">
+          <div class="ml-2 text-h6 font-weight-bold mb-4">
             <span id="span">{{ index + '.' }}</span>
           </div>
-          <div class="ml-2 text-subtitle-1 font-weight-normal mb-4">
+          <div class="ml-2 text-h6 font-weight-normal mb-4">
             <span id="span">{{ key }}</span>
           </div>
         </div>
+      </div>
+
+      <div>
+        <div class="text-h5 font-weight-bold mt-8">
+          <span id="span">Seção de comentários:</span>
+        </div>
+        <div>
+          <div v-if="comments.length == 0">
+            <div class="text-h6 font-weight-normal mt-2">
+              <span id="span">Ainda não há comentários, porque não escreve algum?</span>
+            </div>
+          </div>
+          <div v-if="comments.length > 0">
+            <div
+              v-for="(key, index) in comments"
+              :key="key"
+              class="d-flex"
+              >
+              <div class="border-md w-100 mt-2 rounded-lg">
+                <div class="text-subtitle-1 font-weight-normal ml-2 mt-2">
+                  <span id="span">{{ key.author }}</span>
+                </div>
+                <div class="text-h6 font-weight-normal ml-4 mb-2">
+                  <span id="span">{{ key.comment }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <v-sheet class="my-8" >
+          <v-form fast-fail @submit.prevent="submitComment">
+            <v-text-field
+              v-model="name"
+              label="Name"
+            ></v-text-field>
+
+            <v-text-field
+              v-model="commentLabel"
+              label="Comment"
+            ></v-text-field>
+
+            <v-btn class="mt-2" type="submit" block>Enviar Comentário</v-btn>
+          </v-form>
+        </v-sheet>
       </div>
     </v-col>
 
@@ -124,10 +178,43 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      receiptData: null
+      receiptData: null,
+      name: '',
+      nameRules: [
+        value => {
+          if (value?.length >= 3) return true
+
+          return 'Name must be at least 3 characters.'
+        },
+      ],
+      commentLabel: '',
+      commentRules: [
+        value => {
+          if (value?.length >= 5) return true
+
+          return 'Comment must be at least 5 characters.'
+        },
+      ],
+      comments: [
+        // {
+        //   "author": "Seido",
+        //   "comment": "Muito bom!",
+        // },
+        // {
+        //   "author": "Breno",
+        //   "comment": "Parabéns!",
+        // },
+        // {
+        //   "author": "Justas",
+        //   "comment": "Boa!",
+        // }
+      ],
+      recipes: []
     }
   },
   methods: {
@@ -139,9 +226,32 @@ export default {
         console.log('Category data is not defined');
       }
     },
+    submitComment() {
+      if (this.name.length >= 3 && this.commentLabel.length >= 5) {
+        this.comments.push({
+          author: this.name,
+          comment: this.commentLabel
+        });
+        this.name = '';
+        this.commentLabel = '';
+      }
+    },
+    fetchCategories() {
+      console.log("Hello")
+      axios
+        .get('http://localhost:8000/api/v1/categories/')
+        .then(response => {
+          this.recipes = JSON.parse(JSON.stringify(response.data));
+          console.log(this.recipes)
+        })
+        .catch(error => {
+          console.error('Error fetching categories:', error);
+        });
+    }
   },
   mounted() {
-    this.getReceiptData();
+  this.getReceiptData();
+  this.fetchCategories();
   }
 }
 </script>
