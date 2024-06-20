@@ -9,7 +9,7 @@
     >
     </v-col>
 
-    <!-- <v-col
+    <v-col
       xs="12"
       sm="12"
       md="12"
@@ -18,45 +18,44 @@
       class="pt-8"
     >
       <div v-if="recipes" class="text-h3 font-weight-light pb-8 text-center">
-        <span id="span">{{ categoryData.name }}</span>
+        <span id="span">{{ filteredRecipe.name }}</span>
       </div>
 
       <div>
         <div v-if="recipes">
-            <v-row justify="space-around">
-              <v-col
-                v-for="key in categoryData.receitas"
-                :key="key"
-                cols="16"
-                md="6"
-                >
-                <div
-                >
+          <v-row justify="space-around">
+            <v-col
+              v-for="key in filteredRecipe.recipes"
+              :key="key"
+              cols="16"
+              md="6"
+            >
+              <div>
                 <v-img
-                style="height: 300px;"
-                :src="key.imgLink"
-                cover
-                class="my-auto cursor-pointer"
-                @click="navigateToReceipt(key)"
-                  ></v-img>
-                  
-                  <div class="d-flex">
-                    <div class="text-h6 mb-2">
-                      <span id="span">{{ key.name }}</span>
-                    </div>
-                    <v-spacer></v-spacer>
-                    <v-rating
-                      v-model="key.rate"
-                      hover
-                    ></v-rating>
+                  style="height: 300px;"
+                  :src="key.image"
+                  cover
+                  class="my-auto cursor-pointer"
+                  @click="navigateToReceipt(key.name)"
+                ></v-img>
+                
+                <div class="d-flex">
+                  <div class="text-h6 mb-2">
+                    <span id="span">{{ key.name }}</span>
                   </div>
+                  <v-spacer></v-spacer>
+                  <v-rating
+                    v-model="key.rate"
+                    hover
+                  ></v-rating>
                 </div>
-              </v-col>
-            </v-row>
-          </div>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
       </div>
-    </v-col> -->
-
+    </v-col>
+  
     <v-col
       xs="0"
       sm="0"
@@ -67,7 +66,7 @@
     </v-col>
   </v-row>
 </template>
-
+  
 <script>
 import axios from 'axios';
 
@@ -76,15 +75,9 @@ export default {
     return {
       categoryData: null,
       rating: 3,
-      recipes: []
+      recipes: [],
+      filteredRecipe: []
     }
-  },
-  computed: {
-    // filteredRecipe() {
-    //   const categoryName = this.getCategoryFromUrl();
-    //   console.log(this.recipes.find(recipe => recipe.name === categoryName))
-    //   return this.recipes.find(recipe => recipe.name === categoryName);
-    // }
   },
   methods: {
     getCategoryFromUrl() {
@@ -92,38 +85,33 @@ export default {
       const categoryIndex = pathArray.indexOf('categorias');
       return pathArray[categoryIndex + 1];
     },
-    filteredRecipe() {
-      const categoryName = this.getCategoryFromUrl();
-      return this.recipes.find(recipe => recipe.name === categoryName);
-    },
-    navigateToReceipt(receipt) {
-      const receiptString = JSON.stringify(receipt);
-      this.$router.push({ path: '/receita', query: { receiptString } });
+    navigateToReceipt(recipe) {
+      const name = this.filteredRecipe.name
+      console.log(name)
+      this.$router.push({ path: `/receita/${name}/${recipe}` });
     },
     fetchCategories() {
       axios
-        .get('http://localhost:8000/api/v1/categories/')
-        .then(response => {
-          this.recipes = JSON.parse(JSON.stringify(response.data));
-          console.log(this.recipes)
-        })
-        .catch(error => {
-          console.error('Error fetching categories:', error);
-        });
+      .get('http://localhost:8000/api/v1/categories/')
+      .then(response => {
+        this.recipes = JSON.parse(JSON.stringify(response.data));
+        this.filterRecipe()
+      })
+      .catch(error => {
+        console.error('Error fetching categories:', error);
+      });
+    },
+    filterRecipe() {
+      const categoryName = this.getCategoryFromUrl();
+      this.filteredRecipe = this.recipes.find(recipe => recipe.name === categoryName);
+    },
+    banana() {
+      console.log(this.filteredRecipe)
     }
   },
   mounted () {
-    this.fetchCategories();
-    this.$nextTick(() => {
-  });
+    this.fetchCategories()
   },
-  watch: {
-  recipes(newVal) {
-    if (newVal.length > 0) {
-      console.log(this.filteredRecipe());
-    }
-  }
-}
 }
 </script>
 

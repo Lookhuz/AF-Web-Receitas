@@ -26,7 +26,7 @@
         </div>
         <v-img 
           style="height: 450px;" 
-          :src="receiptData.imgLink" 
+          :src="receiptData.image" 
           cover 
           class="my-auto"
         >
@@ -46,7 +46,7 @@
 
             <v-row no-gutters>
               <v-col
-                v-for="key in receiptData.ingredient" 
+                v-for="key in parsedIngredients" 
                 :key="key"
                 cols="5"
                 md="6"
@@ -74,7 +74,7 @@
             <v-spacer></v-spacer>
             <div>
               <div class="text-h5 font-weight-bold ml-2">
-                <span id="span">Classificação Média dos Usuários:</span>
+                <span id="span">Classificação Média:</span>
               </div>
               <v-rating
                 v-model="receiptData.rate"
@@ -107,7 +107,7 @@
         <v-divider class="my-8"><span class="font-weight-bold text-h5" id="span">Modo de preparo</span></v-divider>
 
         <div
-          v-for="(key, index) in receiptData.preparo"
+          v-for="(key, index) in parsedPreparation"
           :key="key"
           class="d-flex"
         >
@@ -125,20 +125,20 @@
           <span id="span">Seção de comentários:</span>
         </div>
         <div>
-          <div v-if="comments.length == 0">
+          <div v-if="receiptData == 0">
             <div class="text-h6 font-weight-normal mt-2">
               <span id="span">Ainda não há comentários, porque não escreve algum?</span>
             </div>
           </div>
-          <div v-if="comments.length > 0">
+          <div v-if="receiptData">
             <div
-              v-for="(key, index) in comments"
+              v-for="(key, index) in receiptData.comments"
               :key="key"
               class="d-flex"
               >
               <div class="border-md w-100 mt-2 rounded-lg">
                 <div class="text-subtitle-1 font-weight-normal ml-2 mt-2">
-                  <span id="span">{{ key.author }}</span>
+                  <span id="span">{{ key.name }}</span>
                 </div>
                 <div class="text-h6 font-weight-normal ml-4 mb-2">
                   <span id="span">{{ key.comment }}</span>
@@ -176,7 +176,7 @@
     </v-col>
   </v-row>
 </template>
-
+  
 <script>
 import axios from 'axios';
 
@@ -214,18 +214,22 @@ export default {
         //   "comment": "Boa!",
         // }
       ],
-      recipes: []
+      recipes: [],
+      filteredCategory: [],
+      filteredRecipe: []
+    }
+  },
+  computed: {
+    parsedIngredients() {
+      if (!this.receiptData) return [];
+      return this.receiptData.ingredients.split('",\r\n"').map(item => item.replace(/(^"|"$)/g, ''));
+    },
+    parsedPreparation() {
+      if (!this.receiptData) return [];
+      return JSON.parse('{' + this.receiptData.preparation + '}');
     }
   },
   methods: {
-    getReceiptData() {
-      const receipt = this.$route.query.receiptString;
-      if (receipt) {
-        this.receiptData = JSON.parse(receipt);
-      } else {
-        console.log('Category data is not defined');
-      }
-    },
     submitComment() {
       if (this.name.length >= 3 && this.commentLabel.length >= 5) {
         this.comments.push({
@@ -237,25 +241,54 @@ export default {
       }
     },
     fetchCategories() {
-      console.log("Hello")
       axios
         .get('http://localhost:8000/api/v1/categories/')
         .then(response => {
           this.recipes = JSON.parse(JSON.stringify(response.data));
-          console.log(this.recipes)
+          console.log(response.data)
+          this.getRecipeFromUrl()
+          this.finishData()
         })
         .catch(error => {
           console.error('Error fetching categories:', error);
         });
-    }
+    },
+    getCategoryFromUrl() {
+      const pathArray = window.location.pathname.split('/');
+      const categoryIndex = pathArray.indexOf('receita');
+      return pathArray[categoryIndex + 1];
+    },
+    getRecipeFromUrl() {
+      const nameCategory = this.getCategoryFromUrl()
+      const pathArray = window.location.pathname.split('/');
+      const categoryIndex = pathArray.indexOf(nameCategory);
+      const nameRecipe = pathArray[categoryIndex + 1]
+      return decodeURIComponent(nameRecipe)
+    },
+    filterCategory() {
+      const categoryName = this.getCategoryFromUrl();
+      this.filteredCategory = this.recipes.find(recipe => recipe.name === categoryName);
+    },
+    filterRecipe() {
+      const recipeName = this.getRecipeFromUrl();
+      if (this.filteredCategory && Array.isArray(this.filteredCategory.recipes)) {
+        this.filteredRecipe = this.filteredCategory.recipes.find(recipe => recipe.name === recipeName);
+      }
+    },
+    finishData() {
+      this.filterCategory();
+      this.filterRecipe();
+      if (this.filteredRecipe) {
+        this.receiptData = this.filteredRecipe;
+      }
+    },
   },
   mounted() {
-  this.getReceiptData();
-  this.fetchCategories();
+    this.fetchCategories();
   }
 }
 </script>
-
+  
 <style scoped>
 #span{
   font-family: 'MyFont';
