@@ -181,7 +181,7 @@
 </template>
   
 <script>
-import axios from 'axios';
+import * as utils from './../.././utils.js'
 
 export default {
   data() {
@@ -252,6 +252,17 @@ export default {
           console.error('Error fetching categories:', error);
         });
     },
+    fetchCategory () {
+      utils.fetchCategories((error, data) => {
+        if (error) {
+          console.error('Error fetching categories:', error);
+        } else {
+          this.recipes = data
+          this.getRecipeFromUrl()
+          this.finishData()
+        }
+      });
+    },
     getCategoryFromUrl() {
       const pathArray = window.location.pathname.split('/');
       const categoryIndex = pathArray.indexOf('receita');
@@ -283,7 +294,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchCategories();
+    this.fetchCategory();
   }
 }
 </script>

@@ -20,4 +20,4 @@ export default {
     Footer
   }
 }
-</script>
+</script>../components/NavBar.vue../components/Footer.vue

@@ -9,11 +9,11 @@ const routes = [
   {
     path: '/',
     component: siteLayout,
-    redirect: '/receitas',
+    redirect: '/receita',
     children: [
       {
-        path: '/receitas',
-        name: "receitas",
+        path: '/receita',
+        name: "Home",
         component: Home
       },
       {

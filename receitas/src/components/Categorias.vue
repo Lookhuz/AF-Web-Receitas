@@ -68,7 +68,7 @@
 </template>
   
 <script>
-import axios from 'axios';
+import * as utils from './../.././utils.js'
 
 export default {
   data() {
@@ -80,33 +80,30 @@ export default {
     }
   },
   methods: {
-    getCategoryFromUrl() {
-      const pathArray = window.location.pathname.split('/');
-      const categoryIndex = pathArray.indexOf('categorias');
-      return pathArray[categoryIndex + 1];
+    getCategoryURL () {
+      return utils.getCategoryFromUrl()
     },
     navigateToReceipt(recipe) {
       const name = this.filteredRecipe.name
       this.$router.push({ path: `/receita/${name}/${recipe}` });
     },
-    fetchCategories() {
-      axios
-      .get('http://localhost:8000/api/v1/categories/')
-      .then(response => {
-        this.recipes = JSON.parse(JSON.stringify(response.data));
-        this.filterRecipe()
-      })
-      .catch(error => {
-        console.error('Error fetching categories:', error);
-      });
-    },
     filterRecipe() {
-      const categoryName = this.getCategoryFromUrl();
+      const categoryName = this.getCategoryURL()
       this.filteredRecipe = this.recipes.find(recipe => recipe.name === categoryName);
+    },
+    fetchCategory () {
+      utils.fetchCategories((error, data) => {
+        if (error) {
+          console.error('Error fetching categories:', error);
+        } else {
+          this.recipes = data;
+          this.filterRecipe();
+        }
+      });
     },
   },
   mounted () {
-    this.fetchCategories()
+    this.fetchCategory()
   },
 }
 </script>

@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       menus: [
-        { label: "Home", to: "/receitas" },
+        { label: "Home", to: "/receita" },
       ],
     }
   }

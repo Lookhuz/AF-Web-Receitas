@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import * as utils from './../.././utils.js'
 
 export default {
   data() {
@@ -92,19 +92,18 @@ export default {
     navigateToCategories(category) {
       this.$router.push({ path: `/categorias/${category.name}` });
     },
-    fetchCategories() {
-      axios
-        .get('http://localhost:8000/api/v1/categories/')
-        .then(response => {
-          this.recipes = JSON.parse(JSON.stringify(response.data));
-        })
-        .catch(error => {
+    fetchCategory () {
+      utils.fetchCategories((error, data) => {
+        if (error) {
           console.error('Error fetching categories:', error);
-        });
+        } else {
+          this.recipes = data;
+        }
+      });
     }
   },
   mounted() {
-    this.fetchCategories();
+    this.fetchCategory();
   }
 }
 </script>
